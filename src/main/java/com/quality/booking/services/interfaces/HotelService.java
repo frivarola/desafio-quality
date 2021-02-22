@@ -13,4 +13,5 @@ public interface HotelService {
     List<HotelDTO> getAllHotelsAvailable();
     List<HotelDTO> getHotelInRangeDateAndDestination(String Sfrom, String Sto, String destination);
     Boolean reserveHotel(String id);
+    Boolean existDestination(String destination);
 }

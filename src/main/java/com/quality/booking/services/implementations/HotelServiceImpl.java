@@ -1,10 +1,13 @@
 package com.quality.booking.services.implementations;
 
 import com.quality.booking.dtos.HotelDTO;
+import com.quality.booking.exceptions.HotelAPIException;
 import com.quality.booking.model.Hotel;
 import com.quality.booking.repository.implementations.HotelRepositoryImpl;
 import com.quality.booking.repository.interfaces.HotelRepository;
 import com.quality.booking.services.interfaces.HotelService;
+import com.quality.booking.utils.validators.HotelValidator;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -31,15 +34,20 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
-    public List<HotelDTO> getHotelInRangeDateAndDestination(String Sfrom, String Sto, String destination) {
-        //LLAMAR VALIDATIONS
-        DateTimeFormatter formatterRequestParam = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        DateTimeFormatter formatterDB = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-
-        LocalDate from = LocalDate.parse(Sfrom, formatterRequestParam);
-        LocalDate to = LocalDate.parse(Sto, formatterRequestParam);
+    public List<HotelDTO> getHotelInRangeDateAndDestination(String Sfrom, String Sto, String destination) throws HotelAPIException {
         List<HotelDTO> hotels = getAllHotelsAvailable();
         List<HotelDTO> queryResult = new ArrayList<>();
+        DateTimeFormatter formatterDB = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
+        //Validate date and return list of date formatted
+        List<LocalDate> dateSanitized = HotelValidator.validateRangeDate(Sfrom, Sto);
+        LocalDate from = dateSanitized.get(0);
+        LocalDate to = dateSanitized.get(1);
+
+        if(!existDestination(destination)){
+            throw new HotelAPIException(HttpStatus.NOT_FOUND,  "El destino elegido no existe");
+        }
+
         for (HotelDTO h : hotels) {
 
             LocalDate h_available_since = LocalDate.parse(h.getAvailable_since(), formatterDB);
@@ -76,5 +84,17 @@ public class HotelServiceImpl implements HotelService {
         }
 
         return find;
+    }
+
+    @Override
+    public Boolean existDestination(String destination) {
+        List<HotelDTO> hotels = getAllHotelsAvailable();
+        List<HotelDTO> result = new ArrayList<>();
+        hotels.stream().filter(h -> h.getDestination().equals(destination)).map( h -> result.add(h));
+
+        if(result.isEmpty()) {
+            return false;
+        }
+        return true;
     }
 }
