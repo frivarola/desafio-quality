@@ -9,6 +9,9 @@ public class FlightDTO {
     private String departure_date;
     private String return_date;
 
+    public FlightDTO() {
+    }
+
     public FlightDTO(String id, String origin, String destination, String seat_type, String price_per_person, String departure_date, String return_date) {
         this.id = id;
         this.origin = origin;

@@ -10,6 +10,9 @@ public class HotelDTO {
     private String available_to;
     private Boolean reserved;
 
+    public HotelDTO() {
+    }
+
     public HotelDTO(String id, String name, String destination, String room_type, Integer price_per_night, String available_since, String available_to, Boolean reserved) {
         this.id = id;
         this.name = name;
