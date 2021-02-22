@@ -11,6 +11,6 @@ import java.util.List;
  */
 public interface HotelService {
     List<HotelDTO> getAllHotelsAvailable();
-    List<HotelDTO> getHotelDestinationInRangeDate(LocalDate from, LocalDate to, String destination);
+    List<HotelDTO> getHotelInRangeDateAndDestination(String Sfrom, String Sto, String destination);
     Boolean reserveHotel(String id);
 }

@@ -8,6 +8,7 @@ import com.quality.booking.services.interfaces.HotelService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,14 +31,19 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
-    public List<HotelDTO> getHotelDestinationInRangeDate(LocalDate from, LocalDate to, String destination) {
+    public List<HotelDTO> getHotelInRangeDateAndDestination(String Sfrom, String Sto, String destination) {
         //LLAMAR VALIDATIONS
+        DateTimeFormatter formatterRequestParam = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter formatterDB = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
+        LocalDate from = LocalDate.parse(Sfrom, formatterRequestParam);
+        LocalDate to = LocalDate.parse(Sto, formatterRequestParam);
         List<HotelDTO> hotels = getAllHotelsAvailable();
         List<HotelDTO> queryResult = new ArrayList<>();
         for (HotelDTO h : hotels) {
 
-            LocalDate h_available_since = LocalDate.parse(h.getAvailable_since());
-            LocalDate h_available_to = LocalDate.parse(h.getAvailable_to());
+            LocalDate h_available_since = LocalDate.parse(h.getAvailable_since(), formatterDB);
+            LocalDate h_available_to = LocalDate.parse(h.getAvailable_to(), formatterDB);
 
             //this logic simulate a query SELECT * FROM HOTELS WHERE AVAILABLE_SINCE <= FROM AND AVAILABLE_TO >= TO AND DESTINATION = DESTINATION
             if (from.isAfter(h_available_since) || from.isEqual(h_available_since)) {
