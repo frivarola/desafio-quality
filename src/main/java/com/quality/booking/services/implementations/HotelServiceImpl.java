@@ -2,11 +2,9 @@ package com.quality.booking.services.implementations;
 
 import com.quality.booking.dtos.HotelDTO;
 import com.quality.booking.exceptions.HotelAPIException;
-import com.quality.booking.model.Hotel;
 import com.quality.booking.repository.implementations.HotelRepositoryImpl;
-import com.quality.booking.repository.interfaces.HotelRepository;
 import com.quality.booking.services.interfaces.HotelService;
-import com.quality.booking.utils.validators.HotelValidator;
+import com.quality.booking.utils.validators.DateValidator;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +12,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * hotel service implementation
@@ -40,7 +39,7 @@ public class HotelServiceImpl implements HotelService {
         DateTimeFormatter formatterDB = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
         //Validate date and return list of date formatted
-        List<LocalDate> dateSanitized = HotelValidator.validateRangeDate(Sfrom, Sto);
+        List<LocalDate> dateSanitized = DateValidator.validateRangeDate(Sfrom, Sto);
         LocalDate from = dateSanitized.get(0);
         LocalDate to = dateSanitized.get(1);
 
@@ -87,10 +86,10 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
-    public Boolean existDestination(String destination) {
+    public Boolean existDestination(final String destination) {
         List<HotelDTO> hotels = getAllHotelsAvailable();
         List<HotelDTO> result = new ArrayList<>();
-        hotels.stream().filter(h -> h.getDestination().equals(destination)).map( h -> result.add(h));
+        result = hotels.stream().filter(h -> h.getDestination().equals(destination)).collect(Collectors.toList());
 
         if(result.isEmpty()) {
             return false;

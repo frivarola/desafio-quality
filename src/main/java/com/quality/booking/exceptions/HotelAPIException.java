@@ -7,20 +7,9 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.Map;
 
 public class HotelAPIException extends ResponseStatusException {
-    public HotelAPIException(HttpStatus status) {
-        super(status);
-    }
 
     public HotelAPIException(HttpStatus status, String reason) {
         super(status, reason);
-    }
-
-    public HotelAPIException(HttpStatus status, String reason, Throwable cause) {
-        super(status, reason, cause);
-    }
-
-    public HotelAPIException(int rawStatusCode, String reason, Throwable cause) {
-        super(rawStatusCode, reason, cause);
     }
 
     @Override

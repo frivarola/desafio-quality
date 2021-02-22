@@ -36,38 +36,25 @@ public class FlightRepositoryImpl implements FlightRepository {
     }
 
     /**
-     * Return all flights in range date where result match with origin and destination.
-     *
-     * @param from
-     * @param to
-     * @param origin
-     * @param destination
-     * @return flights matched
+     * This method save the flights on json file.
+     * @return false in case an error occurred
      */
     @Override
-    public List<FlightDTO> getFlightsInRangeDate(LocalDate from, LocalDate to, String origin, String destination) {
-        List<FlightDTO> queryResult = new ArrayList<>();
-        for (FlightDTO f : flights) {
-            LocalDate f_departure_date = LocalDate.parse(f.getDeparture_date());
+    public Boolean setAllFlights(List<FlightDTO> update) {
+        if (update != null) {
+            this.flights = update;
 
-            //this logic simulate a query
-            if (from.isAfter(f_departure_date) || from.isEqual(f_departure_date)) {
+            try {
 
-                if (to.isBefore(f_departure_date) || to.isEqual(f_departure_date)) {
+                JsonEngine.writeDatabase(path, this.flights);
 
-                    if (f.getOrigin().equals(origin) && f.getDestination().equals(destination)) {
-                        queryResult.add(f);
-                    }
-                }
-
+            } catch (JsonEngineException e) {
+                e.printStackTrace();
+                return false;
             }
         }
-        return queryResult;
-    }
 
-    @Override
-    public Boolean reserveFlight(String id) {
-        return null;
+        return true;
     }
 
     private static void loadDatabase() {

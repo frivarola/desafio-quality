@@ -5,14 +5,14 @@ public class FlightDTO {
     private String origin;
     private String destination;
     private String seat_type;
-    private String price_per_person;
+    private Integer price_per_person;
     private String departure_date;
     private String return_date;
 
     public FlightDTO() {
     }
 
-    public FlightDTO(String id, String origin, String destination, String seat_type, String price_per_person, String departure_date, String return_date) {
+    public FlightDTO(String id, String origin, String destination, String seat_type, Integer price_per_person, String departure_date, String return_date) {
         this.id = id;
         this.origin = origin;
         this.destination = destination;
@@ -54,11 +54,11 @@ public class FlightDTO {
         this.seat_type = seat_type;
     }
 
-    public String getPrice_per_person() {
+    public Integer getPrice_per_person() {
         return price_per_person;
     }
 
-    public void setPrice_per_person(String price_per_person) {
+    public void setPrice_per_person(Integer price_per_person) {
         this.price_per_person = price_per_person;
     }
 

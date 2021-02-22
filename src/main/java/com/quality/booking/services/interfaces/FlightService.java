@@ -1,8 +1,7 @@
 package com.quality.booking.services.interfaces;
 
 import com.quality.booking.dtos.FlightDTO;
-
-import java.time.LocalDate;
+import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 /**
@@ -11,6 +10,6 @@ import java.util.List;
  */
 public interface FlightService {
     List<FlightDTO> getAllFlightsAvailable();
-    List<FlightDTO> getFlightsInRangeDate(LocalDate from, LocalDate to, String origin, String destination);
+    List<FlightDTO> getFlightsInRangeDate(String from, String to, String origin, String destination) throws ResponseStatusException;
     Boolean reserveFlight(String id);
 }

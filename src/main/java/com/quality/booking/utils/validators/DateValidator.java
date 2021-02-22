@@ -1,8 +1,7 @@
 package com.quality.booking.utils.validators;
 
-import com.quality.booking.exceptions.HotelAPIException;
-import com.quality.booking.model.Hotel;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -11,19 +10,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * this class validate hotel API request
+ * this class validate date format
  * @author frivarola
  */
-public class HotelValidator {
+public class DateValidator {
 
     /**
-     * This method validate date and return date formatted
+     * This method validate range date and return date formatted
      * @param Sfrom from date
      * @param Sto to date
      * @return dates formatted and validated
-     * @throws HotelAPIException
+     * @throws ResponseStatusException
      */
-    public static List<LocalDate>  validateRangeDate(String Sfrom, String Sto) throws HotelAPIException {
+    public static List<LocalDate>  validateRangeDate(String Sfrom, String Sto) throws ResponseStatusException {
         List<LocalDate> dateFormatted = new ArrayList<>();
 
         DateTimeFormatter formatterRequestParam = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -33,10 +32,10 @@ public class HotelValidator {
             LocalDate to = LocalDate.parse(Sto, formatterRequestParam);
 
             if(from.isAfter(to)){
-                throw new HotelAPIException(HttpStatus.BAD_REQUEST, "La fecha de entrada debe ser menor a la de salida");
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La fecha de entrada debe ser menor a la de salida");
             }
             if(to.isBefore(from)){
-                throw new HotelAPIException(HttpStatus.BAD_REQUEST, "La fecha de salida debe ser mayor a la de entrada");
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La fecha de salida debe ser mayor a la de entrada");
             }
             dateFormatted.add(from);
             dateFormatted.add(to);
@@ -44,7 +43,7 @@ public class HotelValidator {
             return dateFormatted;
         } catch (DateTimeParseException de){
             de.printStackTrace();
-            throw new HotelAPIException(HttpStatus.BAD_REQUEST, "Formato de fecha debe ser dd/mm/aaaa");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Formato de fecha debe ser dd/mm/aaaa");
         }
 
     }

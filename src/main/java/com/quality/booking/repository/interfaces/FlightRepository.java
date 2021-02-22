@@ -11,7 +11,6 @@ import java.util.List;
  */
 public interface FlightRepository {
     List<FlightDTO> getAllFlightsAvailable();
-    List<FlightDTO> getFlightsInRangeDate(LocalDate from, LocalDate to, String origin, String destination);
-    Boolean reserveFlight(String id);
+    Boolean setAllFlights(List<FlightDTO> update);
 
 }
