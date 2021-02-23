@@ -1,16 +1,10 @@
 package com.quality.booking.repository.implementations;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.quality.booking.dtos.BookingDTO;
-import com.quality.booking.dtos.FlightDTO;
 import com.quality.booking.dtos.FlightReservationDTO;
-import com.quality.booking.exceptions.JsonEngineException;
 import com.quality.booking.repository.interfaces.BookingRepository;
 import com.quality.booking.utils.jsonEngine.JsonEngine;
 import org.springframework.stereotype.Repository;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * this class is support for write flight reservation and booking on json file
@@ -24,31 +18,31 @@ public class BookingRepositoryImpl implements BookingRepository {
     /**
      * This method is register of reservation on json file
      * @param reservation reservation flight
-     * @throws JsonEngineException
+     * @throws Exception exception file
      */
     @Override
-    public void reservationFlight(FlightReservationDTO reservation) throws JsonEngineException{
+    public void reservationFlight(FlightReservationDTO reservation) throws Exception{
 
         try {
             JsonEngine.appendDatabase(reservationFlightsPath, reservation);
-        } catch (JsonEngineException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            throw new JsonEngineException("No se pudo instanciar los datos de la reserva.");
+            throw new Exception("No se pudo instanciar los datos de la reserva.");
         }
     }
 
     /**
      * This method is for register booking hotel room
      * @param booking a room
-     * @throws JsonEngineException
+     * @throws Exception file
      */
     @Override
-    public void booking(BookingDTO booking) throws JsonEngineException {
+    public void booking(BookingDTO booking) throws Exception {
         try {
             JsonEngine.appendDatabase(bookingPath, booking);
-        } catch (JsonEngineException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            throw new JsonEngineException("No se pudo instanciar los datos de la reserva.");
+            throw new Exception("No se pudo instanciar los datos de la reserva.");
         }
     }
 

@@ -23,6 +23,10 @@ public class BookingDTO {
         this.paymentMethod = paymentMethod;
     }
 
+    public BookingDTO() {
+
+    }
+
     public String getDateFrom() {
         return dateFrom;
     }

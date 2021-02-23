@@ -39,9 +39,7 @@ public class BookingEngineValidator {
             if (from.isAfter(to)) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La fecha de entrada debe ser menor a la de salida");
             }
-            if (to.isBefore(from)) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La fecha de salida debe ser mayor a la de entrada");
-            }
+
             dateFormatted.add(from);
             dateFormatted.add(to);
 
@@ -68,7 +66,6 @@ public class BookingEngineValidator {
                 dues -= 3;
             }
 
-            return interests;
         }
 
         if (card.getType().equals("DEBIT")) {

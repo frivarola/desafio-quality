@@ -5,7 +5,6 @@ package com.quality.booking.utils.jsonEngine;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import com.quality.booking.exceptions.JsonEngineException;
 import org.springframework.util.ResourceUtils;
 
 import java.io.*;
@@ -24,9 +23,9 @@ public class JsonEngine {
      * @param tf type to map
      * @param <T> object generalize
      * @return List of T
-     * @throws JsonEngineException json exception
+     * @throws Exception json exception
      */
-    public static <T> List<T> readFileDB(String path, TypeReference tf) throws JsonEngineException{
+    public static <T> List<T> readFileDB(String path, TypeReference tf) throws Exception{
         List<T> result = new ArrayList<>();
         File fileDb;
         try{
@@ -36,6 +35,7 @@ public class JsonEngine {
 
         } catch (IOException e) {
             e.printStackTrace();
+            throw new Exception("No se pudo escribir los datos en la base de datos");
         }
 
         return result;
@@ -46,9 +46,9 @@ public class JsonEngine {
      * @param pathDB json file
      * @param list objets to save
      * @param <T> Object of list
-     * @throws JsonEngineException json fail
+     * @throws Exception json fail
      */
-    public static <T> void writeDatabase(String pathDB, List<T> list) throws JsonEngineException {
+    public static <T> void writeDatabase(String pathDB, List<T> list) throws Exception {
         File fileDb;
 
         try{
@@ -58,6 +58,7 @@ public class JsonEngine {
 
         } catch (IOException e) {
             e.printStackTrace();
+            throw new Exception("No se pudo escribir los datos en la base de datos");
         }
 
     }
@@ -67,9 +68,9 @@ public class JsonEngine {
      * @param pathDB json file
      * @param objectJson to write on json file
      * @param <T> object to persist
-     * @throws JsonEngineException exception for json fail
+     * @throws Exception exception for json fail
      */
-    public static <T> void appendDatabase(String pathDB, T objectJson) throws JsonEngineException {
+    public static <T> void appendDatabase(String pathDB, T objectJson) throws Exception {
 
             List<T> arrObjectsJson = readFileDB(pathDB, new TypeReference<List<T>>(){});
             arrObjectsJson.add(objectJson);

@@ -5,7 +5,6 @@ import com.quality.booking.dtos.requests.BookingRequestDTO;
 import com.quality.booking.dtos.requests.FlightReservationRequestDTO;
 import com.quality.booking.dtos.responses.FlightReservationResponseDTO;
 import com.quality.booking.dtos.responses.ResponseDTO;
-import com.quality.booking.exceptions.JsonEngineException;
 import com.quality.booking.repository.implementations.BookingRepositoryImpl;
 import com.quality.booking.services.interfaces.BookingService;
 import com.quality.booking.utils.validators.BookingEngineValidator;
@@ -43,9 +42,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public FlightReservationResponseDTO reservationFlight(FlightReservationRequestDTO reservation) throws ResponseStatusException {
 
-        if (reservation.getFlightReservation() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Flight reservation detail is null");
-        }
+        if (reservation.getFlightReservation() == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Flight reservation detail is null");
 
         List<PersonDTO> people = reservation.getFlightReservation().getPeople();
         FlightReservationDTO reservationDetail = reservation.getFlightReservation();
@@ -65,9 +62,7 @@ public class BookingServiceImpl implements BookingService {
         List<FlightDTO> flights = flightService.getFlightsInRangeDate(reservationDetail.getDateFrom(), reservationDetail.getDateTo(), reservationDetail.getOrigin(), reservationDetail.getDestination());
         flights = flights.stream().filter(f -> f.getId().equals(reservationDetail.getFlightNumber()) && f.getSeat_type().equals(reservationDetail.getSeatType())).collect(Collectors.toList());
 
-        if (flights.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No se encontro el vuelo indicado.");
-        }
+        if (flights.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No se encontro el vuelo indicado.");
 
         FlightDTO flightReserved = flights.get(0);
         //calculate total of price
@@ -75,7 +70,7 @@ public class BookingServiceImpl implements BookingService {
 
         try {
             repository.reservationFlight(reservationDetail);
-        } catch (JsonEngineException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Ocurrió un error al escribir el archivo json de la base de datos.");
         }
@@ -93,9 +88,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public ResponseDTO bookingHotel(BookingRequestDTO booking) throws ResponseStatusException {
 
-        if (booking.getBooking() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Booking detail is null");
-        }
+        if (booking.getBooking() == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Booking detail is null");
 
         List<PersonDTO> people = booking.getBooking().getPeople();
         BookingDTO bookingDetail = booking.getBooking();
@@ -117,9 +110,7 @@ public class BookingServiceImpl implements BookingService {
         List<HotelDTO> hotels = hotelService.getHotelInRangeDateAndDestination(bookingDetail.getDateFrom(), bookingDetail.getDateTo(), bookingDetail.getDestination());
         hotels = hotels.stream().filter(h -> h.getId().equals(bookingDetail.getHotelCode()) && h.getRoom_type().equals(bookingDetail.getRoomType()) && h.getReserved().equals(false)).collect(Collectors.toList());
 
-        if (hotels.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No se encontro el hotel indicado.");
-        }
+        if (hotels.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No se encontro el hotel indicado.");
 
         HotelDTO hotelBooking = hotels.get(0);
         //calculate total of price
@@ -128,7 +119,7 @@ public class BookingServiceImpl implements BookingService {
         try {
             repository.booking(bookingDetail);
             hotelService.reserveHotel(bookingDetail.getHotelCode());
-        } catch (JsonEngineException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Ocurrió un error al escribir el archivo json de la base de datos.");
         }

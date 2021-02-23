@@ -2,7 +2,6 @@ package com.quality.booking.repository.implementations;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.quality.booking.dtos.HotelDTO;
-import com.quality.booking.exceptions.JsonEngineException;
 import com.quality.booking.repository.interfaces.HotelRepository;
 import com.quality.booking.utils.jsonEngine.JsonEngine;
 import org.springframework.stereotype.Repository;
@@ -48,7 +47,7 @@ public class HotelRepositoryImpl implements HotelRepository {
 
                 JsonEngine.writeDatabase(path, this.hotels);
 
-            } catch (JsonEngineException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 return false;
             }
@@ -66,7 +65,7 @@ public class HotelRepositoryImpl implements HotelRepository {
 
         try {
             hotels = JsonEngine.readFileDB(path, tf);
-        } catch (JsonEngineException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             hotels = new ArrayList<>();
         }

@@ -11,6 +11,5 @@ import java.util.List;
  */
 public interface FlightRepository {
     List<FlightDTO> getAllFlightsAvailable();
-    Boolean setAllFlights(List<FlightDTO> update);
 
 }
