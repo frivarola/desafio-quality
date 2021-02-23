@@ -1,15 +1,12 @@
 package com.quality.booking.repository.implementations;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.quality.booking.dtos.FlightDTO;
 import com.quality.booking.dtos.HotelDTO;
 import com.quality.booking.exceptions.JsonEngineException;
-import com.quality.booking.model.Hotel;
 import com.quality.booking.repository.interfaces.HotelRepository;
 import com.quality.booking.utils.jsonEngine.JsonEngine;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 

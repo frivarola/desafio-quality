@@ -1,7 +1,6 @@
 package com.quality.booking.controller;
 
 import com.quality.booking.dtos.HotelDTO;
-import com.quality.booking.model.Hotel;
 import com.quality.booking.services.implementations.HotelServiceImpl;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
