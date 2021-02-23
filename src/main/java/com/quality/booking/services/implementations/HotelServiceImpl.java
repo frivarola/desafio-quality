@@ -4,7 +4,7 @@ import com.quality.booking.dtos.HotelDTO;
 import com.quality.booking.exceptions.HotelAPIException;
 import com.quality.booking.repository.implementations.HotelRepositoryImpl;
 import com.quality.booking.services.interfaces.HotelService;
-import com.quality.booking.utils.validators.DateValidator;
+import com.quality.booking.utils.validators.BookingEngineValidator;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +39,7 @@ public class HotelServiceImpl implements HotelService {
         DateTimeFormatter formatterDB = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
         //Validate date and return list of date formatted
-        List<LocalDate> dateSanitized = DateValidator.validateRangeDate(Sfrom, Sto);
+        List<LocalDate> dateSanitized = BookingEngineValidator.validateRangeDate(Sfrom, Sto, "dd/MM/yyyy");
         LocalDate from = dateSanitized.get(0);
         LocalDate to = dateSanitized.get(1);
 

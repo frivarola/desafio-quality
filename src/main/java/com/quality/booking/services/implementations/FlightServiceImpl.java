@@ -4,7 +4,7 @@ import com.quality.booking.dtos.FlightDTO;
 import com.quality.booking.dtos.HotelDTO;
 import com.quality.booking.repository.implementations.FlightRepositoryImpl;
 import com.quality.booking.services.interfaces.FlightService;
-import com.quality.booking.utils.validators.DateValidator;
+import com.quality.booking.utils.validators.BookingEngineValidator;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -39,7 +39,7 @@ public class FlightServiceImpl implements FlightService {
         DateTimeFormatter formatterDB = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
         //Validate date and return list of date formatted
-        List<LocalDate> dateSanitized = DateValidator.validateRangeDate(from, to);
+        List<LocalDate> dateSanitized = BookingEngineValidator.validateRangeDate(from, to, "dd/MM/yyyy");
         LocalDate dateFrom = dateSanitized.get(0);
         LocalDate dateTo = dateSanitized.get(1);
 

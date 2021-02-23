@@ -2,17 +2,17 @@ package com.quality.booking.dtos;
 
 public class PersonDTO {
     private Long dni;
-    private String first_name;
-    private String last_name;
-    private String birth_date;
-    private String email;
+    private String name;
+    private String lastname;
+    private String birthDate;
+    private String mail;
 
-    public PersonDTO(Long dni, String first_name, String last_name, String birth_date, String email) {
+    public PersonDTO(Long dni, String name, String last_name, String birth_date, String mail) {
         this.dni = dni;
-        this.first_name = first_name;
-        this.last_name = last_name;
-        this.birth_date = birth_date;
-        this.email = email;
+        this.name = name;
+        this.lastname = last_name;
+        this.birthDate = birth_date;
+        this.mail = mail;
     }
 
     public Long getDni() {
@@ -23,35 +23,35 @@ public class PersonDTO {
         this.dni = dni;
     }
 
-    public String getFirst_name() {
-        return first_name;
+    public String getName() {
+        return name;
     }
 
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getLast_name() {
-        return last_name;
+    public String getLastname() {
+        return lastname;
     }
 
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 
-    public String getBirth_date() {
-        return birth_date;
+    public String getBirthDate() {
+        return birthDate;
     }
 
-    public void setBirth_date(String birth_date) {
-        this.birth_date = birth_date;
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
     }
 
-    public String getEmail() {
-        return email;
+    public String getMail() {
+        return mail;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setMail(String mail) {
+        this.mail = mail;
     }
 }
