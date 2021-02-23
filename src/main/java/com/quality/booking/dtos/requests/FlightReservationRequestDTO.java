@@ -2,16 +2,16 @@ package com.quality.booking.dtos.requests;
 
 import com.quality.booking.dtos.FlightReservationDTO;
 
-public class FlightReservationRequestDTO {
+public class FlightReservationRequestDTO extends RequestDTO {
     private FlightReservationDTO flightReservation;
-    private String username;
 
     public FlightReservationRequestDTO() {
+        super();
     }
 
     public FlightReservationRequestDTO(FlightReservationDTO flightReservation, String username) {
+        super(username);
         this.flightReservation = flightReservation;
-        this.username = username;
     }
 
     public FlightReservationDTO getFlightReservation() {
@@ -22,11 +22,4 @@ public class FlightReservationRequestDTO {
         this.flightReservation = flightReservation;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
 }

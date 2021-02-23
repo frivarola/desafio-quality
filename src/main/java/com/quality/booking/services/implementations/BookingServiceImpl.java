@@ -1,11 +1,10 @@
 package com.quality.booking.services.implementations;
 
-import com.quality.booking.dtos.FlightDTO;
-import com.quality.booking.dtos.FlightReservationDTO;
-import com.quality.booking.dtos.PersonDTO;
-import com.quality.booking.dtos.StatusDTO;
+import com.quality.booking.dtos.*;
+import com.quality.booking.dtos.requests.BookingRequestDTO;
 import com.quality.booking.dtos.requests.FlightReservationRequestDTO;
 import com.quality.booking.dtos.responses.FlightReservationResponseDTO;
+import com.quality.booking.dtos.responses.ResponseDTO;
 import com.quality.booking.exceptions.JsonEngineException;
 import com.quality.booking.repository.implementations.BookingRepositoryImpl;
 import com.quality.booking.services.interfaces.BookingService;
@@ -25,10 +24,12 @@ import java.util.stream.Collectors;
 public class BookingServiceImpl implements BookingService {
     private BookingRepositoryImpl repository;
     private FlightServiceImpl flightService;
+    private HotelServiceImpl hotelService;
 
-    public BookingServiceImpl(BookingRepositoryImpl repository, FlightServiceImpl flightService) {
+    public BookingServiceImpl(BookingRepositoryImpl repository, FlightServiceImpl flightService, HotelServiceImpl hotelService) {
         this.repository = repository;
         this.flightService = flightService;
+        this.hotelService = hotelService;
     }
 
     /**
@@ -66,12 +67,50 @@ public class BookingServiceImpl implements BookingService {
         Integer amount = flightReserved.getPrice_per_person() * reservationDetail.getSeats();
 
         try {
-            repository.reservationFlight(reservation.getFlightReservation());
+            repository.reservationFlight(reservationDetail);
         } catch (JsonEngineException e) {
             e.printStackTrace();
             throw  new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Ocurrió un error al escribir el archivo json de la base de datos.");
         }
 
         return new FlightReservationResponseDTO(reservation, new StatusDTO(200, "El proceso finalizo correctamente."), amount.doubleValue(), interests, amount.doubleValue() + (amount.doubleValue() * interests));
+    }
+
+    @Override
+    public ResponseDTO bookingHotel(BookingRequestDTO booking) throws ResponseStatusException {
+        List<PersonDTO> people = booking.getBooking().getPeople();
+        BookingDTO bookingDetail = booking.getBooking();
+
+        //validate date
+        BookingEngineValidator.validateRangeDate(bookingDetail.getDateFrom(), bookingDetail.getDateTo(), "dd/MM/yyyy");
+        //validate and calculate interest
+        Double interests = BookingEngineValidator.calculateInterest(bookingDetail.getPaymentMethod());
+
+        //validate mails
+        for (PersonDTO p: people) {
+            BookingEngineValidator.validateEmail(p.getMail());
+        }
+
+        // GET HOTEL BY HOTEL CODE AND ROOM TYPE
+        // and validate Destination
+        List<HotelDTO> hotels = hotelService.getHotelInRangeDateAndDestination(bookingDetail.getDateFrom(), bookingDetail.getDateTo(), bookingDetail.getDestination());
+        hotels = hotels.stream().filter(h -> h.getId().equals(bookingDetail.getHotelCode()) && h.getRoom_type().equals(bookingDetail.getRoomType())).collect(Collectors.toList());
+
+        if(hotels.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No se encontro el hotel indicado.");
+        }
+
+        HotelDTO hotelBooking = hotels.get(0);
+        //calculate total of price
+        Integer amount = hotelBooking.getPrice_per_night() * bookingDetail.getPeopleAmount();
+
+        try {
+            repository.booking(bookingDetail);
+        } catch (JsonEngineException e) {
+            e.printStackTrace();
+            throw  new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Ocurrió un error al escribir el archivo json de la base de datos.");
+        }
+
+        return new ResponseDTO();
     }
 }
