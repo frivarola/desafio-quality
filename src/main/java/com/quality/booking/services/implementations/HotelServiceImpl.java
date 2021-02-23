@@ -82,6 +82,8 @@ public class HotelServiceImpl implements HotelService {
             i++;
         }
 
+        hotelDb.setAllHotels(hotelsQuery);
+
         return find;
     }
 

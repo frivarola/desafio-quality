@@ -64,11 +64,6 @@ public class FlightServiceImpl implements FlightService {
         return result;
     }
 
-    @Override
-    public Boolean reserveFlight(String id) {
-        return null;
-    }
-
     private Boolean existFlight(String origin, String destination) {
         List<FlightDTO> flights = getAllFlightsAvailable();
         List<FlightDTO> result = new ArrayList<>();

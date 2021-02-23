@@ -115,7 +115,7 @@ public class BookingServiceImpl implements BookingService {
         // GET HOTEL BY HOTEL CODE AND ROOM TYPE
         // and validate Destination
         List<HotelDTO> hotels = hotelService.getHotelInRangeDateAndDestination(bookingDetail.getDateFrom(), bookingDetail.getDateTo(), bookingDetail.getDestination());
-        hotels = hotels.stream().filter(h -> h.getId().equals(bookingDetail.getHotelCode()) && h.getRoom_type().equals(bookingDetail.getRoomType())).collect(Collectors.toList());
+        hotels = hotels.stream().filter(h -> h.getId().equals(bookingDetail.getHotelCode()) && h.getRoom_type().equals(bookingDetail.getRoomType()) && h.getReserved().equals(false)).collect(Collectors.toList());
 
         if (hotels.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No se encontro el hotel indicado.");
@@ -127,6 +127,7 @@ public class BookingServiceImpl implements BookingService {
 
         try {
             repository.booking(bookingDetail);
+            hotelService.reserveHotel(bookingDetail.getHotelCode());
         } catch (JsonEngineException e) {
             e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Ocurrió un error al escribir el archivo json de la base de datos.");

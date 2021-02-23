@@ -1,18 +1,22 @@
 package com.quality.booking;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.quality.booking.controller.BookingController;
 import com.quality.booking.controller.FlightController;
 import com.quality.booking.controller.HotelController;
 import com.quality.booking.dtos.FlightDTO;
 import com.quality.booking.dtos.HotelDTO;
+import com.quality.booking.exceptions.JsonEngineException;
 import com.quality.booking.repository.implementations.BookingRepositoryImpl;
 import com.quality.booking.repository.implementations.FlightRepositoryImpl;
 import com.quality.booking.services.implementations.BookingServiceImpl;
 import com.quality.booking.services.implementations.FlightServiceImpl;
 import com.quality.booking.services.implementations.HotelServiceImpl;
+import com.quality.booking.utils.jsonEngine.JsonEngine;
 import org.apache.tomcat.util.json.JSONParser;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureWebMvc;
@@ -24,10 +28,14 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.mockito.BDDMockito.willThrow;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
+import static org.mockito.internal.util.MockUtil.createMock;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -46,6 +54,8 @@ public class BookingControllerTests {
     private FlightServiceImpl mockFlightService;
     @MockBean
     private HotelServiceImpl mockHotelService;
+    @MockBean
+    private JsonEngine jsonEngine;
 
 
     @SpyBean

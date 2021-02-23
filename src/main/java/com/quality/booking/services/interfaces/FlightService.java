@@ -11,5 +11,4 @@ import java.util.List;
 public interface FlightService {
     List<FlightDTO> getAllFlightsAvailable();
     List<FlightDTO> getFlightsInRangeDate(String from, String to, String origin, String destination) throws ResponseStatusException;
-    Boolean reserveFlight(String id);
 }

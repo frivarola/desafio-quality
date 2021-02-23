@@ -75,6 +75,14 @@ class HotelControllerTests {
 				.andExpect(status().isBadRequest());
 	}
 
+	@Test
+	void should_reservate() throws Exception{
+		List<HotelDTO> hotels = createHotels();
+		when(mockHotelDB.getAllHotelsAvailable()).thenReturn(hotels);
+		Boolean result = hotelService.reserveHotel("H1");
+		assert(result);
+	}
+
 	private List<HotelDTO> createHotels(){
 		List<HotelDTO> mockHotels = new ArrayList<>();
 		HotelDTO h = new HotelDTO("H1", "HILTON", "Puerto Iguazu", "DOBLE", 1200, "12-02-2021", "21-03-2021", false);
